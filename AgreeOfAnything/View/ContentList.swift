@@ -10,8 +10,7 @@ import SwiftUI
 struct ContentList: View {
     
     var content: Content
-    var selected: Variant
-    
+   
     @State var showAnswers = false
     
     var body: some View {
@@ -182,7 +181,7 @@ struct PopUpAnswers: View {
 
 struct ContentList_Previews: PreviewProvider {
     static var previews: some View {
-        ContentList(content: contents[5], selected: contents[0].ask[0].variants[0])
+        ContentList(content: contents[5])
         
     }
 }

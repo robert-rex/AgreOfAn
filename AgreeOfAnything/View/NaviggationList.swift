@@ -22,7 +22,7 @@ struct NaviggationList: View {
                 
                 List (contents) { content in
                     
-                    NavigationLink(destination: AnswerRow(content: content)){
+                    NavigationLink(destination: ContentList(content: content)){
                         ContentRow(content: content)
                     }
                 }
