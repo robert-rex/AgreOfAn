@@ -10,13 +10,14 @@ import SwiftUI
 struct ContentList: View {
     
     var content: Content
-   
+    
     @State var showAnswers = false
     
     var body: some View {
         
         ZStack{
-            Color("background")
+            
+            Color(showAnswers ? "shadows" : "background")
                 .ignoresSafeArea()
             VStack{
                 
@@ -25,8 +26,6 @@ struct ContentList: View {
                 TabView {
                     
                     ForEach(content.ask, id: \.self) { test in
-                        
-                        let page = content.ask.count
                         
                         
                         VStack {
@@ -51,6 +50,18 @@ struct ContentList: View {
                             
                             Spacer()
                             
+                            HStack{
+                                
+                                Text("Ответ к вопросу \(content.chapter)")
+                                    .font(.title2)
+                                    .fontWeight(.regular)
+                                    .foregroundColor(.black)
+                                    .multilineTextAlignment(.leading)
+                                    .padding()
+                            }
+                            
+                            Spacer()
+                            
                             HStack (alignment: .top, spacing: 40){
                                 Button("Открыть варианты ответов") {
                                     self.showAnswers.toggle()
@@ -60,20 +71,12 @@ struct ContentList: View {
                             
                             Spacer()
                             
-                            HStack {
-                                Text("Выберите ответ: \(page)")
-                                    .font(.subheadline)
-                            }
-                            
-                            Spacer()
+                            TestWindow(content: content, ask: test,
+                                       showAnswers: $showAnswers)
+                                .offset(y: showAnswers ? 0 : 700)
+                                .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
                             
                             
-                                TestWindow(content: content, ask: test,
-                                           showAnswers: $showAnswers)
-                                    .offset(y: showAnswers ? 0 : 700)
-                                    .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
-
-                           
                             
                             Spacer()
                             
@@ -93,27 +96,22 @@ struct ContentList: View {
 struct TestWindow: View {
     var content: Content
     var ask: Ask
-//    var selected: Variant
+    //    var selected: Variant
     
     @Binding var showAnswers: Bool
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false){
-        HStack {
-            ForEach(ask.variants, id: \.self) { i in
-                
-                NavigationLink(
-                    destination: ContentDetail(content: content, selected: i),
-                    label: {
-                        PopUpAnswers(content: content, selected: i, showAnswers: $showAnswers)
-                            .offset(y: showAnswers ? 0 : 700)
-                            .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
-                        
-                        
-                    })
+            HStack {
+                ForEach(ask.variants, id: \.self) { i in
+                    
+                            PopUpAnswers(content: content, selected: i, showAnswers: $showAnswers)
+                                .offset(y: showAnswers ? 0 : 700)
+                                .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
+                            
+                }
             }
         }
-    }
     }
 }
 
@@ -129,34 +127,33 @@ struct PopUpAnswers: View {
     var body: some View {
         VStack(alignment: .center) {
             
-            HStack{
-                
-                Text("Ответ к вопросу \(content.chapter)")
-                    .font(.title)
-                    .foregroundColor(.black)
-                    .multilineTextAlignment(.leading)
-                    .padding(.top)
-            }
-            
             VStack {
                 Text("\(selected.name)")
                     .font(.title2)
                     .foregroundColor(Color.black)
                     .multilineTextAlignment(.leading)
+                    .padding([.top, .leading, .trailing], 20)
             }
-            .padding(5)
+            
             
             
             Spacer()
             
             HStack {
-                Text("Не cогласен")
-                    .foregroundColor(.blue)
+                Button {
+                    self.showAnswers.toggle()
+                }label:  {
+                    Text("Закрыть")
+                        .fontWeight(.heavy)
+                        .foregroundColor(.red)
+                }
+                
                 Spacer()
                 NavigationLink(destination: ContentDetail(content: content, selected: selected),
                                label:  {
                     Text("Согласен")
-                        .foregroundColor(.green)
+                        .fontWeight(.heavy)
+                        .foregroundColor(Color("accentColor"))
                 })
                 
                 
@@ -169,9 +166,9 @@ struct PopUpAnswers: View {
         .aspectRatio(4/3, contentMode: .fit)
         //                .frame(maxWidth: .infinity)
         //                .frame(maxHeight: 480)
-        .background(Color.white).opacity(0.5)
+        .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-        .shadow(color: Color.black.opacity(0.3), radius: 30, x: 8, y: 20)
+        .shadow(color: Color.black.opacity(0.3), radius: 10, x: 8, y: 8)
         .padding(.horizontal, 5)
         .padding()
     }
