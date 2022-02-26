@@ -9,33 +9,26 @@ import SwiftUI
 
 struct NaviggationList: View {
     
-//    init () { UITableView.appearance().backgroundColor = UIColor("background")
-//    }
+    init () { UITableView.appearance().backgroundColor = UIColor(named: "background")
+        UINavigationBar.appearance().tintColor = UIColor.black
+        UINavigationBar.appearance().barTintColor = UIColor(named: "background")
+        
+    }
     
     var body: some View {
         
-        ZStack {
-            Color("background")
-                .ignoresSafeArea()
-            
-            NavigationView{
+        NavigationView{
+            List (contents) { content in
                 
-                List (contents) { content in
+                NavigationLink(destination: ContentList(content: content)){
+                    ContentRow(content: content)
                     
-                    NavigationLink(destination: ContentList(content: content)){
-                        ContentRow(content: content)
-                    }
                 }
-                .navigationTitle("Проверь себя")
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationBarHidden(false)
-                .navigationBarItems(trailing:
-                                        Button("Результат"){
-                    print("Вставить результат")
-                })
-                
-                
+                .listRowBackground(Color("background"))
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Проверь себя")
+            .navigationBarHidden(false)
             
         }
     }

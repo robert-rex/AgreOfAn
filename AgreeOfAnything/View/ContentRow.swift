@@ -18,7 +18,7 @@ struct ContentRow: View {
             Text(content.chapter)
             Spacer()
         }
-        .listRowBackground(Color("background"))
+        
         
     }
 }

@@ -19,6 +19,7 @@ struct ContentList: View {
             
             Color(showAnswers ? "shadows" : "background")
                 .ignoresSafeArea()
+           
             VStack{
                 
                 //            Содержание вопросов с первым циклом
@@ -37,7 +38,7 @@ struct ContentList: View {
                             }
                             
                             ScrollView(showsIndicators: false){
-                                HStack{
+                                VStack{
                                     Text("\(test.title)")
                                         .font(.title2)
                                         .multilineTextAlignment(.leading)
@@ -45,29 +46,49 @@ struct ContentList: View {
                                         .lineSpacing(10.0)
                                     
                                 }
-                            }
-                            
-                            
-                            Spacer()
-                            
-                            HStack{
-                                
-                                Text("Ответ к вопросу \(content.chapter)")
-                                    .font(.title2)
-                                    .fontWeight(.regular)
-                                    .foregroundColor(.black)
-                                    .multilineTextAlignment(.leading)
-                                    .padding()
-                            }
-                            
-                            Spacer()
-                            
-                            HStack (alignment: .top, spacing: 40){
-                                Button("Открыть варианты ответов") {
-                                    self.showAnswers.toggle()
+                                .onTapGesture{
+                                    if showAnswers == true{
+                                        self.showAnswers = false
+                                    }
                                 }
                             }
-                            .font(.title2)
+                            
+                            
+                            Spacer()
+                            
+//                            HStack{
+//
+//                                Text("Ответ к вопросу \(content.chapter)")
+//                                    .font(.title2)
+//                                    .fontWeight(.regular)
+//                                    .foregroundColor(.black)
+//                                    .multilineTextAlignment(.leading)
+//                                    .padding()
+//                            }
+//
+//                            Spacer()
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(lineWidth: 1)
+                                    .foregroundColor(.black)
+                                
+                                HStack (alignment: .top, spacing: 40){
+                                    
+                                    Button("Выберите вариант ответа") {
+                                        self.showAnswers.toggle()
+                                    }
+                                }
+                                .font(.title2)
+                                .foregroundColor(Color("accentColor"))
+                                
+                            }
+                            .padding(.top, 20)
+                            .frame(width: 300.0, height: 85.0)
+                            .shadow(color: (Color(#colorLiteral(red: 0.9794914126, green: 0.3892467618, blue: 0.01223743614, alpha: 1))).opacity(0.3), radius: 10, y: 10)
+                            
+                            
+                            
+                            
                             
                             Spacer()
                             
@@ -75,8 +96,6 @@ struct ContentList: View {
                                        showAnswers: $showAnswers)
                                 .offset(y: showAnswers ? 0 : 700)
                                 .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0))
-                            
-                            
                             
                             Spacer()
                             
@@ -129,7 +148,7 @@ struct PopUpAnswers: View {
             
             VStack {
                 Text("\(selected.name)")
-                    .font(.title2)
+                    .font(.title3)
                     .foregroundColor(Color.black)
                     .multilineTextAlignment(.leading)
                     .padding([.top, .leading, .trailing], 20)
@@ -140,14 +159,14 @@ struct PopUpAnswers: View {
             Spacer()
             
             HStack {
-                Button {
-                    self.showAnswers.toggle()
-                }label:  {
-                    Text("Закрыть")
-                        .fontWeight(.heavy)
-                        .foregroundColor(.red)
-                }
-                
+//                Button {
+//                    self.showAnswers.toggle()
+//                }label:  {
+//                    Text("Вернуться")
+//                        .fontWeight(.heavy)
+//                        .foregroundColor(.red)
+//                }
+//
                 Spacer()
                 NavigationLink(destination: ContentDetail(content: content, selected: selected),
                                label:  {
@@ -155,18 +174,19 @@ struct PopUpAnswers: View {
                         .fontWeight(.heavy)
                         .foregroundColor(Color("accentColor"))
                 })
+                Spacer()
                 
                 
             }
             .font(.title2)
-            .padding(.horizontal, 30)
+            .padding()
             .padding(.bottom, 30)
             
         }
         .aspectRatio(4/3, contentMode: .fit)
         //                .frame(maxWidth: .infinity)
         //                .frame(maxHeight: 480)
-        .background(Color.white)
+        .background(Color.white.opacity(0.9))
         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
         .shadow(color: Color.black.opacity(0.3), radius: 10, x: 8, y: 8)
         .padding(.horizontal, 5)
@@ -178,7 +198,7 @@ struct PopUpAnswers: View {
 
 struct ContentList_Previews: PreviewProvider {
     static var previews: some View {
-        ContentList(content: contents[5])
+        ContentList(content: contents[15])
         
     }
 }
